@@ -15,10 +15,19 @@ namespace dmYandexAds {
 	}
 
 	void SendRewardedMessage(int amount, const char *type) {
-		dmLogInfo("rewarded: %d, %s", amount, type);
 		char buffer[2048];
 		uint32_t len = dmSnPrintf(buffer, sizeof(buffer), "{\"event\": %d, \"amount\": %d, \"type\": \"%s\"}", (int)EVENT_REWARDED, amount, type);
 		AddToQueueCallback(MSG_REWARDED, buffer);
+	}
+
+	void SendImpressionMessage(MessageId type, const char *impressionData) {
+		if (impressionData != nullptr) {
+			char buffer[64 + strlen(impressionData)];
+			uint32_t len = dmSnPrintf(buffer, sizeof(buffer), "{\"event\": %d, \"impression\": %s}", (int)EVENT_IMPRESSION, impressionData);
+			AddToQueueCallback(type, buffer);
+		} else {
+			SendSimpleMessage(type, EVENT_IMPRESSION);
+		}
 	}
 }
 
@@ -197,7 +206,7 @@ namespace dmYandexAds {
 }*/
 
 -(void)adView:(nonnull YMAAdView *)adView didTrackImpressionWithData:(nullable id<YMAImpressionData>)impressionData {
-	SendSimpleMessage(MSG_BANNER, EVENT_IMPRESSION);
+	SendImpressionMessage(MSG_BANNER, impressionData.rawData.UTF8String);
 }
 /* #endregion */
 
@@ -236,7 +245,7 @@ didFailToLoadWithError:(nonnull YMAAdRequestError *)error {
 
 -(void)interstitialAd:(YMAInterstitialAd *)interstitialAd
 didTrackImpressionWithData:(nullable id<YMAImpressionData>)impressionData {
-	SendSimpleMessage(MSG_INTERSTITIAL, EVENT_IMPRESSION);
+	SendImpressionMessage(MSG_INTERSTITIAL, impressionData.rawData.UTF8String);
 }
 
 /* #endregion */
@@ -280,7 +289,7 @@ didFailToLoadWithError:(YMAAdRequestError *)error {
 
 -(void)rewardedAd:(YMARewardedAd *)rewardedAd
 didTrackImpressionWithData:(nullable id<YMAImpressionData>)impressionData {
-	SendSimpleMessage(MSG_REWARDED, EVENT_IMPRESSION);
+	SendImpressionMessage(MSG_REWARDED, impressionData.rawData.UTF8String);
 }
 
 /* #endregion */
