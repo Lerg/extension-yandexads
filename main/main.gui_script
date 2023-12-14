@@ -65,7 +65,7 @@ end
 
 local function load_banner_pressed(self)
 	log('load_banner_pressed')
-	yandexads.load_banner(yandexads_ids.banner)
+	yandexads.load_banner(yandexads_ids.banner, 400, 50)
 end
 
 local function is_banner_loaded_pressed(self)
@@ -75,7 +75,7 @@ end
 
 local function show_banner_pressed(self)
 	log('show_banner_pressed')
-	yandexads.show_banner(yandexads.POS_BOTTOM_CENTER, 350)
+	yandexads.show_banner(yandexads.POS_BOTTOM_CENTER)
 end
 
 local function hide_banner_pressed(self)
