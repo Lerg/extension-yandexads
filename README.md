@@ -91,12 +91,12 @@ yandexads.set_user_consent(true) -- Call if user has given consent
 ```lua
 local function listener(self, message_id, message)
 	if message_id == yandexads.MSG_ADS_INITED then
-		yandexads.load_banner('demo-banner-yandex')
+		yandexads.load_banner('demo-banner-yandex', 350)
 	end
 
 	if message_id == yandexads.MSG_BANNER then
 		if event == yandexads.EVENT_LOADED then
-			yandexads.show_banner(yandexads.BOTTOM_CENTER, 350) -- optional position(default BOTTOM_CENTER)
+			yandexads.show_banner(yandexads.BOTTOM_CENTER) -- optional position(default BOTTOM_CENTER)
 		end
 	end
 end
